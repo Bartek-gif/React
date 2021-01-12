@@ -3,29 +3,33 @@ import React from 'react';
 import styles from './List.scss';
 import Hero from '../Hero/Hero.js';
 import Column from '../Column/Column.js';
+import {settings} from '../../data/dataStore';
+import ReactHtmlParser from 'react-html-parser';
 
 class List extends React.Component {
   static propTypes= {
     title: PropTypes.node.isRequired,
-    heroImg: PropTypes.string.isRequired,
-    children: PropTypes.node,
+    image: PropTypes.string.isRequired,
+    description: PropTypes.node,
+    columns: PropTypes.array,
   }
 
   static defaultProps = {
-    children: <p>I can do all the thingd!!!</p>
+    description: settings.defaultListDescription,
   }
   
   render() {
+    console.log(this.props)
     return (
       <section className={styles.component}>
-       <Hero title={this.props.title} heroImg={this.props.heroImg}/>
+       <Hero title={this.props.title} image={this.props.image}/>
         <div className={styles.description}>
-          {this.props.children}
+          {ReactHtmlParser(this.props.description)}  
         </div>
         <div className={styles.columns}>
-          <Column title="column-1"/>
-          <Column title="column-2"/>
-          <Column title="column-3"/>
+          {this.props.columns.map(({key, ...columnProps}) => (
+            <Column key={key} {...columnProps} />
+          ))}
         </div>
       </section>
       
